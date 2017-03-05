@@ -27,14 +27,16 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     public static final int RATED_OPTION = 2;
     private static final String PATH_POPULAR = "popular";
     private static final String PATH_RATED = "top_rated";
+    private static final String SELECTED_OPT = "selected_option";
 
     private MoviePosterAdapter mPosterAdapter;
     private RecyclerView mRecyclerView;
     private TextView mErrorMessageDisplay;
     private ProgressBar mProgressBar;
 
-
     private TextView mTextView;
+
+    private int selectedOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,19 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
 
         mProgressBar = (ProgressBar) findViewById(R.id.loading_indicator);
 
-        loadPopularMovies();
+        if(savedInstanceState != null){
+            selectedOption = savedInstanceState.getInt(SELECTED_OPT);
+        } else {
+            selectedOption = POPULAR_OPTION;
+        }
+
+        loadMovies(selectedOption);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SELECTED_OPT, selectedOption);
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -75,17 +89,11 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     }
 
     /**
-     * Loads popular movies
+     * Loads movies by criteria
      */
-    private void loadPopularMovies(){
-        new FetchMoviesTask().execute(POPULAR_OPTION);
-    }
-
-    /**
-     * Loads top rated movies
-     */
-    private void loadTopRatedMovies(){
-        new FetchMoviesTask().execute(RATED_OPTION);
+    private void loadMovies(int criteria){
+        selectedOption = criteria;
+        new FetchMoviesTask().execute(criteria);
     }
 
     /**
@@ -162,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.menu_popular) {
-            loadPopularMovies();
+            loadMovies(POPULAR_OPTION);
             return true;
         } else if(itemThatWasClickedId == R.id.menu_toprated) {
-            loadTopRatedMovies();
+            loadMovies(RATED_OPTION);
             return true;
         }
         return super.onOptionsItemSelected(item);

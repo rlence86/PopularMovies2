@@ -7,4 +7,7 @@
     <string name="synopsis">Synopsis</string>
     <string name="userrating">User rating</string>
     <string name="releasedate">Release date</string>
+    <string name="title_activity_single">SingleActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

@@ -7,11 +7,16 @@ import java.io.Serializable;
  */
 
 public class Movie implements Serializable {
+    private int id;
     private String original_title;
     private String poster_path;
     private String overview;
     private Double vote_average;
     private String release_date;
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getOriginal_title() {
         return original_title;

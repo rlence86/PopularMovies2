@@ -17,12 +17,12 @@ import java.util.Scanner;
 public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String MOVIES_BASE_URL =
+        private static final String MOVIES_BASE_URL =
             "http://api.themoviedb.org/3/movie/";
 
     private static final String MOVIES_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
-    private static final String PRIVATE_AUTH_KEY = "yourprivatekeyhere";
+    private static final String PRIVATE_AUTH_KEY = "28443ec5c0ea68a10bb1c780ec6a2f17";
 
 
     public static URL buildUrl(String queryPath) {

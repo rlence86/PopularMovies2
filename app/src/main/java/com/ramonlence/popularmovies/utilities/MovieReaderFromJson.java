@@ -22,6 +22,8 @@ public class MovieReaderFromJson {
             for (int i = 0; i < resultsArray.length(); i++)
             {
                 Movie movie = new Movie();
+                int id = resultsArray.getJSONObject(i).getInt("id");
+                movie.setId(id);
                 String originalTitle = resultsArray.getJSONObject(i).getString("original_title");
                 movie.setOriginal_title(originalTitle);
                 String posterPath = resultsArray.getJSONObject(i).getString("poster_path");
