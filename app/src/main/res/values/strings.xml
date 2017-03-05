@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="error_message">Error</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="pupular">Popular</string>
+    <string name="original_title">Original title</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="userrating">User rating</string>
+    <string name="releasedate">Release date</string>
+</resources>
