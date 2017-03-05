@@ -18,6 +18,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".SingleMovie" />
+        <activity
+            android:name=".SingleActivity"
+            android:label="@string/title_activity_single"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MovieActivity"
+            android:label="@string/title_activity_movie"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

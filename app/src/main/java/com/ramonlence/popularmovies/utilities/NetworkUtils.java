@@ -22,7 +22,7 @@ public class NetworkUtils {
 
     private static final String MOVIES_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
-    private static final String PRIVATE_AUTH_KEY = "28443ec5c0ea68a10bb1c780ec6a2f17";
+    private static final String PRIVATE_AUTH_KEY = "yourapikeyhere";
 
 
     public static URL buildUrl(String queryPath) {
