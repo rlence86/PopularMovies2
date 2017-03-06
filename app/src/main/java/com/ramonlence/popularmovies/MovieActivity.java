@@ -1,6 +1,7 @@
 package com.ramonlence.popularmovies;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,10 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ramonlence.popularmovies.entities.Movie;
+import com.ramonlence.popularmovies.utilities.MovieReaderFromJson;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MovieActivity extends AppCompatActivity {
 
@@ -140,6 +143,7 @@ public class MovieActivity extends AppCompatActivity {
                     rootView = showMovieDetailsView(inflater, container);
                     break;
                 case 2:
+                    rootView = showVideosForMovie(inflater, container);
                     break;
                 case 3:
                     break;
@@ -160,6 +164,32 @@ public class MovieActivity extends AppCompatActivity {
             mReleaseDate.setText(movieToShow.getRelease_date());
             URL imageUrl = NetworkUtils.buildImageUrl(movieToShow.getPoster_path(),"small");
             Picasso.with(mPosterView.getContext()).load(imageUrl.toString()).into(mPosterView);
+            return rootView;
+        }
+
+        private View showVideosForMovie(LayoutInflater inflater, ViewGroup container) {
+            View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
+            AsyncTask trailersFetch = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    if(objects.length == 0){
+                        return null;
+                    }
+                    int movieId = (int) objects[0];
+                    URL trailersURL = NetworkUtils.buildTrailerUrl(movieId);
+                    try {
+                        String jsonTrailerResponse = NetworkUtils
+                                .getResponseFromHttpUrl(trailersURL);
+
+                        return null;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            };
+            trailersFetch.execute(movieToShow.getId());
             return rootView;
         }
     }
@@ -191,11 +221,11 @@ public class MovieActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return getString(R.string.details);
                 case 1:
-                    return "SECTION 2";
+                    return getString(R.string.videos);
                 case 2:
-                    return "SECTION 3";
+                    return getString(R.string.reviews);
             }
             return null;
         }

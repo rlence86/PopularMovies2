@@ -75,6 +75,26 @@ public class NetworkUtils {
         }
     }
 
+    public static URL buildTrailerUrl(int movieId){
+        if(movieId > 0){
+            Uri builtUri = Uri.parse(MOVIES_BASE_URL).buildUpon()
+                    .appendPath(""+movieId)
+                    .appendPath("videos")
+                    .appendQueryParameter("api_key", PRIVATE_AUTH_KEY)
+                    .build();
+            URL url = null;
+            try {
+                url = new URL(builtUri.toString());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            return url;
+        } else {
+            return null;
+        }
+    }
+
     /**
      * This method returns the entire result from the HTTP response.
      *
