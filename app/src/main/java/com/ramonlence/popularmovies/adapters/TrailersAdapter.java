@@ -1,7 +1,10 @@
 package com.ramonlence.popularmovies.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import com.ramonlence.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Array;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -65,6 +69,15 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
         @Override
         public void onClick(View v){
+            int adapterPosition = getAdapterPosition();
+            Trailer selectedTrailer = mTrailersData.get(adapterPosition);
+            if(selectedTrailer.getSite().equalsIgnoreCase("youtube")){
+                Uri youtubeUri = Uri.parse(NetworkUtils.buildYoutubeURL(selectedTrailer.getKey()).toString());
+                Intent intent = new Intent(Intent.ACTION_VIEW, youtubeUri);
+                if (intent.resolveActivity(v.getContext().getPackageManager()) != null) {
+                    v.getContext().startActivity(intent);
+                }
+            }
         }
     }
 }

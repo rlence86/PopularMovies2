@@ -17,8 +17,11 @@ import java.util.Scanner;
 public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-        private static final String MOVIES_BASE_URL =
-            "http://api.themoviedb.org/3/movie/";
+    private static final String MOVIES_BASE_URL =
+        "http://api.themoviedb.org/3/movie/";
+
+    private static final String YOUTUBE_BASE_URL =
+        "http://www.youtube.com/";
 
     private static final String MOVIES_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
@@ -93,6 +96,21 @@ public class NetworkUtils {
         } else {
             return null;
         }
+    }
+
+    public static URL buildYoutubeURL(String videoID){
+        Uri builtUri = Uri.parse(YOUTUBE_BASE_URL).buildUpon()
+                .appendPath("watch")
+                .appendQueryParameter("v", videoID)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 
     /**
