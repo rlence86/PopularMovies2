@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -20,9 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ramonlence.popularmovies.adapters.MoviePosterAdapter;
+import com.ramonlence.popularmovies.adapters.TrailersAdapter;
 import com.ramonlence.popularmovies.entities.Movie;
+import com.ramonlence.popularmovies.entities.Trailer;
 import com.ramonlence.popularmovies.utilities.MovieReaderFromJson;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -181,7 +186,9 @@ public class MovieActivity extends AppCompatActivity {
                         String jsonTrailerResponse = NetworkUtils
                                 .getResponseFromHttpUrl(trailersURL);
 
-                        return null;
+                        ArrayList<Trailer> result = MovieReaderFromJson.readTrailers(jsonTrailerResponse);
+
+                        return result;
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -189,7 +196,12 @@ public class MovieActivity extends AppCompatActivity {
                     }
                 }
             };
+            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_trailers);
+            TrailersAdapter trailersAdapter = new TrailersAdapter();
+            recyclerView.setAdapter(trailersAdapter);
             trailersFetch.execute(movieToShow.getId());
+            ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_indicator_trailer);
+            progressBar.setVisibility(View.VISIBLE);
             return rootView;
         }
     }

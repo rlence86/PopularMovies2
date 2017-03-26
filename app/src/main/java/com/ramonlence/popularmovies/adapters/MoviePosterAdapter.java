@@ -1,4 +1,4 @@
-package com.ramonlence.popularmovies;
+package com.ramonlence.popularmovies.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,15 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.ramonlence.popularmovies.R;
 import com.ramonlence.popularmovies.entities.Movie;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ramon on 24/1/17.

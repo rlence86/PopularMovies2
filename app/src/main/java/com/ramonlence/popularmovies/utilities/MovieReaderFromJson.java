@@ -1,6 +1,7 @@
 package com.ramonlence.popularmovies.utilities;
 
 import com.ramonlence.popularmovies.entities.Movie;
+import com.ramonlence.popularmovies.entities.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,33 @@ public class MovieReaderFromJson {
                 String releaseDate = resultsArray.getJSONObject(i).getString("release_date");
                 movie.setRelease_date(releaseDate);
                 result.add(movie);
+            }
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static ArrayList<Trailer> readTrailers(String jsonResponse){
+        ArrayList<Trailer> result = new ArrayList<Trailer>();
+
+        try {
+            JSONObject obj = new JSONObject(jsonResponse);
+            JSONArray resultsArray = obj.getJSONArray("results");
+            for (int i = 0; i < resultsArray.length(); i++)
+            {
+                Trailer trailer = new Trailer();
+                String id = resultsArray.getJSONObject(i).getString("id");
+                trailer.setId(id);
+                String key = resultsArray.getJSONObject(i).getString("key");
+                trailer.setKey(key);
+                String title = resultsArray.getJSONObject(i).getString("name");
+                trailer.setTitle(title);
+                String site = resultsArray.getJSONObject(i).getString("site");
+                trailer.setSite(site);
+                result.add(trailer);
+
             }
         } catch(JSONException e){
             e.printStackTrace();

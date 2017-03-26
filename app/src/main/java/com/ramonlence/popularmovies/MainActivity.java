@@ -2,7 +2,6 @@ package com.ramonlence.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ramonlence.popularmovies.adapters.MoviePosterAdapter;
 import com.ramonlence.popularmovies.entities.Movie;
 import com.ramonlence.popularmovies.utilities.MovieReaderFromJson;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
