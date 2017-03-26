@@ -1,6 +1,7 @@
 package com.ramonlence.popularmovies.utilities;
 
 import com.ramonlence.popularmovies.entities.Movie;
+import com.ramonlence.popularmovies.entities.Review;
 import com.ramonlence.popularmovies.entities.Trailer;
 
 import org.json.JSONArray;
@@ -63,6 +64,30 @@ public class MovieReaderFromJson {
                 trailer.setSite(site);
                 result.add(trailer);
 
+            }
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static ArrayList<Review> readReviews(String jsonResponse){
+        ArrayList<Review> result = new ArrayList<Review>();
+
+        try {
+            JSONObject obj = new JSONObject(jsonResponse);
+            JSONArray resultsArray = obj.getJSONArray("results");
+            for (int i = 0; i < resultsArray.length(); i++)
+            {
+                Review review = new Review();
+                String id = resultsArray.getJSONObject(i).getString("id");
+                review.setId(id);
+                String author = resultsArray.getJSONObject(i).getString("author");
+                review.setAuthor(author);
+                String content = resultsArray.getJSONObject(i).getString("content");
+                review.setContent(content);
+                result.add(review);
             }
         } catch(JSONException e){
             e.printStackTrace();

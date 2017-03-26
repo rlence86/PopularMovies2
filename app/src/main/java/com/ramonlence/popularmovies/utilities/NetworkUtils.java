@@ -75,11 +75,11 @@ public class NetworkUtils {
         }
     }
 
-    public static URL buildTrailerUrl(int movieId){
+    public static URL buildExtraUrl(int movieId, String extraType){
         if(movieId > 0){
             Uri builtUri = Uri.parse(MOVIES_BASE_URL).buildUpon()
                     .appendPath(""+movieId)
-                    .appendPath("videos")
+                    .appendPath(extraType)
                     .appendQueryParameter("api_key", PRIVATE_AUTH_KEY)
                     .build();
             URL url = null;

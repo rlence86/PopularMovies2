@@ -6,6 +6,8 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
@@ -25,8 +27,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ramonlence.popularmovies.adapters.MoviePosterAdapter;
+import com.ramonlence.popularmovies.adapters.ReviewsAdapter;
 import com.ramonlence.popularmovies.adapters.TrailersAdapter;
 import com.ramonlence.popularmovies.entities.Movie;
+import com.ramonlence.popularmovies.entities.Review;
 import com.ramonlence.popularmovies.entities.Trailer;
 import com.ramonlence.popularmovies.utilities.MovieReaderFromJson;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
@@ -151,6 +155,7 @@ public class MovieActivity extends AppCompatActivity {
                     rootView = showVideosForMovie(inflater, container);
                     break;
                 case 3:
+                    rootView = showReviewsForMovie(inflater, container);
                     break;
             }
             return rootView;
@@ -174,6 +179,13 @@ public class MovieActivity extends AppCompatActivity {
 
         private View showVideosForMovie(LayoutInflater inflater, ViewGroup container) {
             View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
+            final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_indicator_trailer);
+            progressBar.setVisibility(View.VISIBLE);
+            final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_trailers);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setHasFixedSize(true);
+            final TrailersAdapter trailersAdapter = new TrailersAdapter();
+            recyclerView.setAdapter(trailersAdapter);
             AsyncTask trailersFetch = new AsyncTask() {
                 @Override
                 protected Object doInBackground(Object[] objects) {
@@ -181,7 +193,7 @@ public class MovieActivity extends AppCompatActivity {
                         return null;
                     }
                     int movieId = (int) objects[0];
-                    URL trailersURL = NetworkUtils.buildTrailerUrl(movieId);
+                    URL trailersURL = NetworkUtils.buildExtraUrl(movieId, "videos");
                     try {
                         String jsonTrailerResponse = NetworkUtils
                                 .getResponseFromHttpUrl(trailersURL);
@@ -195,15 +207,70 @@ public class MovieActivity extends AppCompatActivity {
                         return null;
                     }
                 }
+
+                @Override
+                protected void onPostExecute(Object o) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if (o != null) {
+                        ArrayList<Trailer> trailers = (ArrayList<Trailer>) o;
+                        trailersAdapter.setTrailersData(trailers);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    } else {
+
+                    }
+                }
             };
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_trailers);
-            TrailersAdapter trailersAdapter = new TrailersAdapter();
-            recyclerView.setAdapter(trailersAdapter);
             trailersFetch.execute(movieToShow.getId());
-            ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_indicator_trailer);
-            progressBar.setVisibility(View.VISIBLE);
             return rootView;
         }
+
+        private View showReviewsForMovie(LayoutInflater inflater, ViewGroup container) {
+            View rootView = inflater.inflate(R.layout.frament_reviews, container, false);
+            final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_indicator_reviews);
+            progressBar.setVisibility(View.VISIBLE);
+            final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_reviews);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setHasFixedSize(true);
+            final ReviewsAdapter reviewsAdapter = new ReviewsAdapter();
+            recyclerView.setAdapter(reviewsAdapter);
+            AsyncTask trailersFetch = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    if(objects.length == 0){
+                        return null;
+                    }
+                    int movieId = (int) objects[0];
+                    URL reviewsURL = NetworkUtils.buildExtraUrl(movieId, "reviews");
+                    try {
+                        String jsonReviewsResponse = NetworkUtils
+                                .getResponseFromHttpUrl(reviewsURL);
+
+                        ArrayList<Review> result = MovieReaderFromJson.readReviews(jsonReviewsResponse);
+
+                        return result;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(Object o) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if (o != null) {
+                        ArrayList<Review> reviews = (ArrayList<Review>) o;
+                        reviewsAdapter.setmReviewsData(reviews);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    } else {
+
+                    }
+                }
+            };
+            trailersFetch.execute(movieToShow.getId());
+            return rootView;
+        }
+
     }
 
     /**
