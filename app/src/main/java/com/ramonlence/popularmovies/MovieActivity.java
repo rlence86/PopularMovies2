@@ -36,6 +36,8 @@ import com.ramonlence.popularmovies.utilities.MovieReaderFromJson;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -180,6 +182,8 @@ public class MovieActivity extends AppCompatActivity {
         private View showVideosForMovie(LayoutInflater inflater, ViewGroup container) {
             View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
             final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_indicator_trailer);
+            final TextView errorView = (TextView) rootView.findViewById(R.id.video_error_message_display);
+            final TextView emptyMessageView = (TextView) rootView.findViewById(R.id.video_no_video_message);
             progressBar.setVisibility(View.VISIBLE);
             final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_trailers);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -214,9 +218,13 @@ public class MovieActivity extends AppCompatActivity {
                     if (o != null) {
                         ArrayList<Trailer> trailers = (ArrayList<Trailer>) o;
                         trailersAdapter.setTrailersData(trailers);
-                        recyclerView.setVisibility(View.VISIBLE);
+                        if(trailersAdapter.getItemCount()==0){
+                            emptyMessageView.setVisibility(View.VISIBLE);
+                        } else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                     } else {
-
+                        errorView.setVisibility(View.VISIBLE);
                     }
                 }
             };
@@ -227,6 +235,8 @@ public class MovieActivity extends AppCompatActivity {
         private View showReviewsForMovie(LayoutInflater inflater, ViewGroup container) {
             View rootView = inflater.inflate(R.layout.frament_reviews, container, false);
             final ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.loading_indicator_reviews);
+            final TextView errorView = (TextView) rootView.findViewById(R.id.reviews_error_message_display);
+            final TextView emptyMessageView = (TextView) rootView.findViewById(R.id.reviews_no_video_message);
             progressBar.setVisibility(View.VISIBLE);
             final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_reviews);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -261,9 +271,13 @@ public class MovieActivity extends AppCompatActivity {
                     if (o != null) {
                         ArrayList<Review> reviews = (ArrayList<Review>) o;
                         reviewsAdapter.setmReviewsData(reviews);
-                        recyclerView.setVisibility(View.VISIBLE);
+                        if(reviewsAdapter.getItemCount()==0){
+                            emptyMessageView.setVisibility(View.VISIBLE);
+                        } else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                     } else {
-
+                        errorView.setVisibility(View.VISIBLE);
                     }
                 }
             };
