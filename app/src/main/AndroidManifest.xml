@@ -17,7 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SingleMovie" />
         <activity
             android:name=".SingleActivity"
             android:label="@string/title_activity_single"
