@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.ramonlence.popularmovies.R;
 import com.ramonlence.popularmovies.entities.Review;
-import com.ramonlence.popularmovies.entities.Trailer;
+import com.riyagayasen.easyaccordion.AccordionView;
 
 import java.util.ArrayList;
 
@@ -41,7 +41,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
     @Override
     public void onBindViewHolder(ReviewsAdapter.ReviewsViewHolder holder, int position) {
         Review reviewInPosition = mReviewsData.get(position);
-        holder.mViewReviewAuthor.setText(reviewInPosition.getAuthor());
+        holder.mViewReviewAuthor.setHeadingString(reviewInPosition.getAuthor());
         holder.mViewReviewContent.setText(reviewInPosition.getContent());
     }
 
@@ -51,11 +51,11 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
     }
 
     public class ReviewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mViewReviewAuthor;
+        private AccordionView mViewReviewAuthor;
         private TextView mViewReviewContent;
         public ReviewsViewHolder(View view){
             super(view);
-            mViewReviewAuthor = (TextView) view.findViewById(R.id.review_author);
+            mViewReviewAuthor = (AccordionView) view.findViewById(R.id.author_title);
             mViewReviewContent = (TextView) view.findViewById(R.id.review_content);
             view.setOnClickListener(this);
         }
