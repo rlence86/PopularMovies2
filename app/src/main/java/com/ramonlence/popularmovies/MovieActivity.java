@@ -1,5 +1,6 @@
 package com.ramonlence.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
@@ -22,9 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ramonlence.popularmovies.adapters.MoviePosterAdapter;
 import com.ramonlence.popularmovies.adapters.ReviewsAdapter;
@@ -66,6 +69,8 @@ public class MovieActivity extends AppCompatActivity {
 
     private static Movie movieToShow;
 
+    private FloatingActionButton fabButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +95,19 @@ public class MovieActivity extends AppCompatActivity {
             movieToShow = (Movie) currentIntent.getSerializableExtra("SelectedMovie");
         }
 
-    }
+        fabButton = (FloatingActionButton) findViewById(R.id.fab);
+        fabButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Context context = getApplicationContext();
+                CharSequence text = movieToShow.getOriginal_title() + "saved!";
+                int duration = Toast.LENGTH_SHORT;
 
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
