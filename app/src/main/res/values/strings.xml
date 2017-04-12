@@ -16,4 +16,5 @@
     <string name="reviews">REVIEWS</string>
     <string name="no_video_message">No trailers for this movie</string>
     <string name="no_reviews_message">No reviews for ths movie</string>
+    <string name="content_authority">com.ramonlence.popularmovies</string>
 </resources>

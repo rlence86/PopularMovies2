@@ -2,6 +2,7 @@ package com.ramonlence.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +36,7 @@ import com.ramonlence.popularmovies.adapters.TrailersAdapter;
 import com.ramonlence.popularmovies.entities.Movie;
 import com.ramonlence.popularmovies.entities.Review;
 import com.ramonlence.popularmovies.entities.Trailer;
+import com.ramonlence.popularmovies.utilities.FavoriteMoviesManager;
 import com.ramonlence.popularmovies.utilities.MovieReaderFromJson;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -71,6 +73,8 @@ public class MovieActivity extends AppCompatActivity {
 
     private FloatingActionButton fabButton;
 
+    private FavoriteMoviesManager mFavMoviesManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,17 +99,46 @@ public class MovieActivity extends AppCompatActivity {
             movieToShow = (Movie) currentIntent.getSerializableExtra("SelectedMovie");
         }
 
+        mFavMoviesManager = new FavoriteMoviesManager();
+
         fabButton = (FloatingActionButton) findViewById(R.id.fab);
         fabButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Context context = getApplicationContext();
-                CharSequence text = movieToShow.getOriginal_title() + "saved!";
+                //Check if we have to add or to remove movie
+                boolean isFavoriteMovie = mFavMoviesManager.isMovieInFavorites(movieToShow, getApplicationContext());
+                String toastText = movieToShow.getOriginal_title();
+                boolean removed = false;
+                boolean added = false;
+                if(isFavoriteMovie){
+                    //We want to remove the movie
+                    removed = mFavMoviesManager.removeMovieFromFavorites(movieToShow,getApplicationContext());
+                    if(removed){
+                        toastText += " removed";
+                        fabButton.setImageResource(android.R.drawable.btn_star_big_off);
+                    }
+                } else {
+                    //We want to add the movie
+                    added = mFavMoviesManager.addMovieToFavorites(movieToShow, getApplicationContext());
+                    if(added){
+                        toastText +=  " added!";
+                        fabButton.setImageResource(android.R.drawable.btn_star_big_on);
+                    }
+                }
                 int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast toast = Toast.makeText(getApplicationContext(), toastText, duration);
+
+                if(added || removed) {
+                    toast.show();
+                }
             }
         });
+
+        //Check if movie is in Favorites to paint fullfilled star
+        boolean isFavoriteMovie = mFavMoviesManager.isMovieInFavorites(movieToShow, getApplicationContext());
+        if(isFavoriteMovie){
+            fabButton.setImageResource(android.R.drawable.btn_star_big_on);
+        }
 
     }
 
