@@ -3,6 +3,7 @@ package com.ramonlence.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     private static final String PATH_POPULAR = "popular";
     private static final String PATH_RATED = "top_rated";
     private static final String SELECTED_OPT = "selected_option";
+    private static final String LIST_STATE = "list_state";
 
     private MoviePosterAdapter mPosterAdapter;
     private RecyclerView mRecyclerView;
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     private TextView mTextView;
 
     private int selectedOption;
+
+    private Parcelable mListState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
 
         if(savedInstanceState != null){
             selectedOption = savedInstanceState.getInt(SELECTED_OPT);
+            mListState = savedInstanceState.getParcelable(LIST_STATE);
         } else {
             selectedOption = POPULAR_OPTION;
         }
@@ -72,7 +77,17 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SELECTED_OPT, selectedOption);
+        Parcelable mListState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(LIST_STATE, mListState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(selectedOption == FAVORITES_OPTION) {
+            loadMovies(FAVORITES_OPTION);
+        }
     }
 
     /**
@@ -161,9 +176,16 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
             if (movies != null) {
                 mPosterAdapter.setMoviesData(movies);
                 showMoviesPoster();
+                restoreLayoutPosition();
             } else {
                 showError();
             }
+        }
+    }
+
+    private void restoreLayoutPosition() {
+        if (mListState != null) {
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
         }
     }
 
