@@ -15,9 +15,11 @@ import android.widget.TextView;
 
 import com.ramonlence.popularmovies.adapters.MoviePosterAdapter;
 import com.ramonlence.popularmovies.entities.Movie;
+import com.ramonlence.popularmovies.utilities.FavoriteMoviesManager;
 import com.ramonlence.popularmovies.utilities.MovieReaderFromJson;
 import com.ramonlence.popularmovies.utilities.NetworkUtils;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
 
     public static final int POPULAR_OPTION = 1;
     public static final int RATED_OPTION = 2;
+    public static final int FAVORITES_OPTION = 3;
     private static final String PATH_POPULAR = "popular";
     private static final String PATH_RATED = "top_rated";
     private static final String SELECTED_OPT = "selected_option";
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
         @Override
         protected ArrayList<Movie> doInBackground(Integer... option) {
 
-            if (option.length==0 || (POPULAR_OPTION != option[0] && RATED_OPTION != option[0])) {
+            if (option.length==0 || (POPULAR_OPTION != option[0] && RATED_OPTION != option[0] && FAVORITES_OPTION != option[0])) {
                 return null;
             }
             String queryPath = "";
@@ -130,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
                 queryPath = PATH_POPULAR;
             } else if(RATED_OPTION == option[0]){
                 queryPath = PATH_RATED;
+            } else if(FAVORITES_OPTION == option[0]){
+                FavoriteMoviesManager fMoviesManager = new FavoriteMoviesManager();
+                ArrayList<Movie> favoriteMovies = fMoviesManager.getAllFavoriteMovies(getApplicationContext());
+                return favoriteMovies;
             }
 
             URL moviesRequestUrl = NetworkUtils.buildUrl(queryPath);
@@ -174,6 +181,9 @@ public class MainActivity extends AppCompatActivity implements MoviePosterAdapte
             return true;
         } else if(itemThatWasClickedId == R.id.menu_toprated) {
             loadMovies(RATED_OPTION);
+            return true;
+        } else if(itemThatWasClickedId == R.id.menu_favorites) {
+            loadMovies(FAVORITES_OPTION);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -12,4 +12,10 @@
         android:orderInCategory="2">
 
     </item>
+    <item
+        android:id="@+id/menu_favorites"
+        android:title="@string/favorites"
+        android:orderInCategory="2">
+
+    </item>
 </menu>
